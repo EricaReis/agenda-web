@@ -59,9 +59,16 @@ export const TableContainer = styled.section`
 
     button {
       border: none;
-      padding: 20px 5px;
+      margin-top: 15px;
+      padding: 5px 5px;
       background: transparent;
       color: #4169E1;
+      border-radius: 50%;
+      transition: 0.5s;
+      
+    }
+    button:hover {
+      background: rgba(0, 0, 0, 0.1);
     }
   }
 `;

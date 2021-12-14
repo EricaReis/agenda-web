@@ -1,6 +1,7 @@
-import React, { useEffect } from "react";
-
+import React, { useEffect, useState } from "react";
+import { toast } from 'react-toastify';
 import { useNavigate } from "react-router-dom";
+
 
 import Header from "../../../components/Header";
 import {
@@ -9,32 +10,47 @@ import {
   MdDelete,
 } from "react-icons/md";
 
+import { IGroup } from '../models';
+
 import api from '../services';
 
 import { Container, TableContainer, FabButton } from "./styles";
 
-const groups = 
-[
-  {
-    name: 'Emergência',
-  },
-  {
-    name: 'Família',
-  },
-  {
-    name: 'Amigos',
-  }
-];
-
 const Group: React.FC = () => {
   const navigate = useNavigate();
+  const [ groups, setGroups ] = useState<IGroup[]>();
 
   const getGroupsInfo = async () => {
-    await api.getGroups();
-  }
+    const groupsInfo = await api.getGroups();
+    setGroups(groupsInfo);
+  };
+
+  const handleDeleteGroup = (index: any) => {
+    console.log(index);
+    try {
+      if ( groups ) {
+        console.log(groups[index]._id)
+        api.deleteGroup(groups[index]._id);
+
+        toast('Grupo excluído com sucesso!', { type: "success"});
+      }
+
+      getGroupsInfo();
+    } catch (error) {
+      console.log(error);
+      toast('Erro ao excluir o grupo.', { type: "error"});
+    }
+    return index;
+  };
+
+  const handleEditGroup = (index: any): void => {
+     if ( groups ) {
+      navigate(`/group/form/${groups[index]._id}`);
+     }
+  };
 
   useEffect(() => {
-    getGroupsInfo()
+    getGroupsInfo();
   }, []);
 
   return (
@@ -51,14 +67,14 @@ const Group: React.FC = () => {
             </thead>
 
             <tbody>
-              {groups.map((group) => (
+              {groups && groups.map((group, i) => (
                 <tr key={group.name}>
                   <td className="title">{group.name}</td>
                   <div className="buttons">
-                    <button>
+                    <button type="button" onClick={() => handleEditGroup(i)}>
                       <MdModeEditOutline size={28} />
                     </button>
-                    <button>
+                    <button type="button" onClick={() => handleDeleteGroup(i)}>
                       <MdDelete size={28} />
                     </button>
                   </div>

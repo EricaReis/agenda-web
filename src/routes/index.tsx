@@ -40,6 +40,9 @@ const Routes: React.FC = () => (
     <Route path="/group/form" element={<ProtectedRoute component={GroupForm} />}>
       <Route path="/group/form" element={<GroupForm />} />
     </Route>
+    <Route path="/group/form/:id" element={<ProtectedRoute component={GroupForm} />}>
+      <Route path="/group/form/:id" element={<GroupForm />} />
+    </Route>
   </Switch>
 );
 
