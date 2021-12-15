@@ -5,12 +5,12 @@ export const Container = styled.div`
   display: flex;
   width: 100%;
   justify-content: center;
+  flex-direction: column;
 `;
 
 export const TableContainer = styled.section`
   display: flex;
   width: 90%;
-  margin-top: 64px;
   overflow-x: auto;
   align-items: center;
 

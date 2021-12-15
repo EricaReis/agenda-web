@@ -17,11 +17,13 @@ import api from "../services";
 import Loading from "../../../components/Loading";
 
 import { Container, TableContainer, FabButton } from "./styles";
+import SearchBar from "./components/SearchBar";
 
 const Contact: React.FC = () => {
   const navigate = useNavigate();
   const [contacts, setContacts] = useState<IContact[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [search, setSearch] = useState<string>("");
 
   const getContactInfo = async () => {
     setIsLoading(true);
@@ -73,6 +75,10 @@ const Contact: React.FC = () => {
       <Header size="small" />
       {isLoading && <Loading /> }
       <Container>
+        <SearchBar
+          search={search}
+          setSearch={setSearch}
+        />
         <TableContainer>
           <table>
             <thead>
@@ -86,7 +92,7 @@ const Contact: React.FC = () => {
             </thead>
 
             <tbody>
-              {contacts && contacts.map((contact, i) => (
+              {contacts && contacts.filter((contact) => contact.name.toLowerCase().includes(search.toLowerCase())).map((contact, i) => (
                 <tr key={contact._id}>
                   <td>{contact.name}</td>
                   <td>{contact.group}</td>
