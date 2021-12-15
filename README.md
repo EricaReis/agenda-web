@@ -22,6 +22,20 @@ Then
 npm start
 # or
 yarn start
+
+
+```
+
+Login
+
+
+```bash
+# username:
+teste@gmail.com
+# password:
+123456
+
+
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
