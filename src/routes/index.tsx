@@ -34,6 +34,9 @@ const Routes: React.FC = () => (
     <Route path="/contact/form" element={<ProtectedRoute component={ContactForm} />}>
       <Route path="/contact/form" element={<ContactForm />} />
     </Route>
+    <Route path="/contact/form/:id" element={<ProtectedRoute component={ContactForm} />}>
+      <Route path="/contact/form/:id" element={<ContactForm />} />
+    </Route>
     <Route path="/group" element={<ProtectedRoute component={Group} />}>
       <Route path="/group" element={<Group />} />
     </Route>

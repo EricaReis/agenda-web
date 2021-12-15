@@ -1,9 +1,10 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
 import SidebarLink from "./SidebarLink";
-import { useAuth } from "../../../hooks/auth";
 import { FiArrowLeft } from 'react-icons/fi';
+import { AuthService } from "../../../pages/Group/services/authService";
 
 
 import { Container, ContainerLinks, StyledButton } from "./styles";
@@ -13,7 +14,14 @@ interface Props {
 }
 
 const sideDrawer: React.FC<Props> = ({  setIsMenuOpen }) => {
-  const { signOut } = useAuth();
+  const authService = new AuthService();
+  const navigate = useNavigate();
+
+  const signOutUser = async () => {
+    await authService.signOut();
+
+    navigate('/');
+  };
   return (
     <Container>
       <StyledButton onClick={() => setIsMenuOpen(false)}>
@@ -23,7 +31,7 @@ const sideDrawer: React.FC<Props> = ({  setIsMenuOpen }) => {
         <SidebarLink title="Contatos" route="/contact" />
         <SidebarLink title="Grupos" route="/group" />
       </ContainerLinks>
-      <button className="logout-button" onClick={signOut} type="button">
+      <button className="logout-button" onClick={signOutUser} type="button">
             Sair
       </button>
     </Container>

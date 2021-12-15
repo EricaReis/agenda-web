@@ -1,35 +1,39 @@
 import React, { useEffect, useState } from "react";
 import { toast } from 'react-toastify';
 import { useNavigate } from "react-router-dom";
-
-
-import Header from "../../../components/Header";
 import {
   MdGroupAdd, 
   MdModeEditOutline,
   MdDelete,
 } from "react-icons/md";
 
+import Header from "../../../components/Header";
 import { IGroup } from '../models';
-
-import api from '../services';
-
 import { Container, TableContainer, FabButton } from "./styles";
+import api from '../services';
+import { OverlayTrigger, Tooltip } from "react-bootstrap";
+import Loading from "../../../components/Loading";
 
 const Group: React.FC = () => {
   const navigate = useNavigate();
   const [ groups, setGroups ] = useState<IGroup[]>();
+  const [ isLoading, setIsLoading ] = useState<boolean>(false);
 
   const getGroupsInfo = async () => {
-    const groupsInfo = await api.getGroups();
-    setGroups(groupsInfo);
+    try {
+      setIsLoading(true);
+      const groupsInfo = await api.getGroups();
+      setGroups(groupsInfo);
+      
+    } catch (error) {
+      toast('Erro ao carregar grupos!', { type: "error"});
+    }
+    setIsLoading(false);
   };
 
   const handleDeleteGroup = (index: any) => {
-    console.log(index);
     try {
       if ( groups ) {
-        console.log(groups[index]._id)
         api.deleteGroup(groups[index]._id);
 
         toast('Grupo excluído com sucesso!', { type: "success"});
@@ -53,8 +57,15 @@ const Group: React.FC = () => {
     getGroupsInfo();
   }, []);
 
+  const renderTooltip = (props: any) => (
+    <Tooltip id="button-tooltip" {...props}>
+      {props}
+    </Tooltip>
+  );
+
   return (
       <Container>
+      {isLoading && <Loading />}
       <Header size="small" />
         <h1>Grupos</h1>
         <TableContainer>
@@ -71,12 +82,24 @@ const Group: React.FC = () => {
                 <tr key={group.name}>
                   <td className="title">{group.name}</td>
                   <div className="buttons">
+                  <OverlayTrigger
+                    placement="left"
+                    delay={{ show: 250, hide: 400 }}
+                    overlay={renderTooltip('Editar')}
+                  >
                     <button type="button" onClick={() => handleEditGroup(i)}>
                       <MdModeEditOutline size={28} />
                     </button>
+                  </OverlayTrigger>
+                  <OverlayTrigger
+                    placement="left"
+                    delay={{ show: 250, hide: 400 }}
+                    overlay={renderTooltip('Excluir')}
+                  >
                     <button type="button" onClick={() => handleDeleteGroup(i)}>
                       <MdDelete size={28} />
                     </button>
+                  </OverlayTrigger>
                   </div>
                 </tr>
               ))} 

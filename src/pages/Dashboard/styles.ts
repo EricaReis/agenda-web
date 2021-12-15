@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { shade } from 'polished';
 
 interface CardProps {
   group?: boolean;
@@ -21,6 +22,10 @@ export const CardContainer = styled.section`
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   grid-gap: 32px;
   margin-top: -150px;
+
+  button {
+    border: none;
+  }
 `;
 
 export const Card = styled.div`
@@ -30,6 +35,11 @@ export const Card = styled.div`
   border: 1px solid #4169E1;
   border-radius: 5px;
   color: ${({ group }: CardProps): string => (group ? '#F1E9DA' : '#000000')};
+  transition: 0.5s;
+
+  :hover {
+    background: ${({ group }: CardProps): string => (group ? shade(0.2, '#4169E1') : shade(0.2, '#FFFAFA'))};
+  }
 
   header {
     display: flex;

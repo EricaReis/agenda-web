@@ -1,12 +1,9 @@
 import React, { useState } from "react";
-
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import logoImg from "../../assets/logo.svg";
-
-import { useAuth } from "../../hooks/auth";
 import { FiMenu } from 'react-icons/fi';
-
+import { AuthService } from "../../pages/Group/services/authService";
 import { Container, StyledButton } from "./styles";
 import SideDrawer from "./SideDrawer";
 
@@ -15,13 +12,22 @@ interface HeaderProps {
 }
 
 const Header: React.FC<HeaderProps> = ({ size = "large" }: HeaderProps) => {
-  const { signOut } = useAuth();
+  const authService = new AuthService();
+  const navigate = useNavigate();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  const signOutUser = async () => {
+    await authService.signOut();
+
+    navigate('/');
+  };
 
   return (
     <Container size={size}>
       <header>
-        <img src={logoImg} alt="VexContacts" />
+        <button className="logo-button" type="button" onClick={() => navigate('/dashboard')}>
+          <img src={logoImg} alt="VexContacts" />
+        </button>
         <div className="d-md-none">
           <StyledButton type="button" onClick={() => setIsMenuOpen(!isMenuOpen)}>
             <FiMenu color="#4169E1" size="30"/>
@@ -31,7 +37,7 @@ const Header: React.FC<HeaderProps> = ({ size = "large" }: HeaderProps) => {
           <nav>
             <Link to="/contact">Contatos</Link>
             <Link to="/group">Grupos</Link>
-        <button className="logout-button" onClick={signOut} type="button">
+        <button className="logout-button" onClick={signOutUser} type="button">
             Sair
         </button>
           </nav>

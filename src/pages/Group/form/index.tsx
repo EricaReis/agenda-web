@@ -1,22 +1,18 @@
 /* eslint-disable no-restricted-globals */
 import React, { useRef, useCallback, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from "react-router-dom";
+import { toast } from 'react-toastify';
 import { Form } from "@unform/web";
 import * as Yup from "yup";
-import { toast } from 'react-toastify';
-
 import { ImUsers } from "react-icons/im";
 
-import getValidationsErros from "../../../utils/getValidationErrors";
-
 import Input from "../../../components/Input";
+import getValidationsErros from "../../../utils/getValidationErrors";
 import Header from "../../../components/Header";
-import { IGroup } from '../models';
 import { Container, StyledButton } from "./styles";
 
 import api from '../services/index';
+import Loading from "../../../components/Loading";
 
 interface ContactFormData {
   name: string;
@@ -26,8 +22,8 @@ const ContactForm: React.FC = () => {
   const formRef = useRef<any>(null);
   const navigate = useNavigate();
   const { id } = useParams<string>();
-  const [ groupId, setGroupId] = useState<string>();
   const [ name, setName] = useState<string>();
+  const [ isLoading, setIsLoading ] = useState<boolean>(false);
 
   const handleSubmit = useCallback(
     async ({ name }: ContactFormData) => {
@@ -51,22 +47,13 @@ const ContactForm: React.FC = () => {
           name: name
         }
 
-        console.log('id do grupo', id);
-
+        setIsLoading(true);
         if (id) {
-          try {
-            await api.putGroup(id, groupData);
-            toast('Grupo editado com sucesso!', { type: "success"});
-          } catch (error) {
-            toast('Houve um erro ao editar o grupo.', { type: "error"});
-          }
+          await api.putGroup(id, groupData);
+          toast('Grupo editado com sucesso!', { type: "success"});
         } else {
-          try {
-            await api.postGroups(groupData);
-            toast('Grupo adicionado com sucesso!', { type: "success"});
-          } catch (error) {
-            toast('Houve um erro ao criar o grupo.', { type: "error"});
-          }
+          await api.postGroups(groupData);
+          toast('Grupo adicionado com sucesso!', { type: "success"});
         }
 
         navigate('/group');
@@ -76,38 +63,35 @@ const ContactForm: React.FC = () => {
 
           formRef.current?.setErrors(errors);
         }
+        toast("Erro ao salvar os dados!", { type: "error"});
       }
+      setIsLoading(false);
     },
     []
   );
 
-  const getGroupInfo = async (id: string) => {
-    if (id && id !== 'form') {
+
+  const getGroupInfo = async () => {
+    if (id) {
       try {
-          const info = await api.getGroupById(id);
-          setName(info.name);
-          setGroupId(id);
+        setIsLoading(true)
+        const info = await api.getGroupById(id);
+        setName(info.name);
       } catch (error) {
         toast('Erro ao buscar os dados do grupo.', { type: "error"});
       }
-    }
-  }
-
-  const getGroup = () => {
-    const urlParams = window.location.pathname;
-    const groupIdParam = urlParams.substring(urlParams.lastIndexOf('/') + 1);
-    setGroupId(groupIdParam);
-    getGroupInfo(groupIdParam);
+      setIsLoading(false);
+    };
   };
 
   useEffect(() => {
-    console.log(id);
-    getGroup();
+    getGroupInfo();
   }, []);
   
   return (
     <>
       <Header size="small" />
+      {isLoading && <Loading />}
       <Container>
         <Form ref={formRef} onSubmit={handleSubmit}>
           {id ? (<h1>Novo Grupo</h1>) : (<h1>Editar Grupo</h1>) }

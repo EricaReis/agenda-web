@@ -25,7 +25,7 @@ interface SignInFormData {
 const SignIn: React.FC = () => {
   const formRef = useRef<FormHandles>(null);
   const [ isLoading, setIsLoading ] = useState(false);
-  const authService = new AuthService()
+  const authService = new AuthService();
   const navigate = useNavigate();
 
   const handleSubmit = useCallback(
@@ -49,7 +49,7 @@ const SignIn: React.FC = () => {
         
         setIsLoading(true);
 
-        await authService.login(email, password)
+        await authService.login(email, password);
 
         toast('Bem vindo(a) ao VexContacts!', { type: "success"})
 

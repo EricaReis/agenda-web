@@ -9,6 +9,11 @@ export const Container = styled.div<ContainerProps>`
   background: #fff;
   padding: 30px 0;
 
+  .logo-button {
+    border: none;
+    background: transparent;
+  }
+
   header {
     width: 100%;
     max-width: 1120px;
