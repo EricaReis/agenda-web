@@ -24,7 +24,7 @@ export const Container = styled.div<ContainerProps>`
     justify-content: space-between;
 
     img {
-      width: 250px;
+      width: 200px;
     }
 
     div {

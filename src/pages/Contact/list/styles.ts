@@ -8,11 +8,18 @@ export const Container = styled.div`
   flex-direction: column;
 `;
 
+export const SearchBarContainer = styled.div`
+  display: flex;
+  width: 90%;
+  align-self: center;
+  margin-top: 1rem;
+`;
+
 export const TableContainer = styled.section`
   display: flex;
   width: 90%;
   overflow-x: auto;
-  align-items: center;
+  align-self: center;
 
   table {
     width: 100%;

@@ -16,9 +16,8 @@ import TelephoneForm from "./components/TelephoneForm";
 import { IAddress, IContact } from "../models";
 import { IGroup } from "../../Group/models";
 
-import { Container, StyledButton, Select, ContainerButton, ModalButton } from "./styles";
+import { Container, StyledButton, Select, ContainerButton, ModalButton, TableContainer } from "./styles";
 import Loading from "../../../components/Loading";
-import { TableContainer } from "../list/styles";
 import { MdDelete, MdModeEditOutline } from "react-icons/md";
 
 const ContactForm: React.FC = () => {
@@ -181,6 +180,7 @@ return (
           name="email"
           placeholder="E-mail"
         />
+        <h3>Telefone:</h3>
         {telephones?.length > 0 && (
           <TableContainer>
             <table>
@@ -227,15 +227,15 @@ return (
             type="button"
             onClick={() => setShowTelephoneModal(true)}
           >
-            Adicionar Telephone
-            <ImPlus size={28} />
+            Adicionar Telefone
+            <ImPlus size={25} />
           </ModalButton>
         </ContainerButton>
-        <h3 className="text-dark mt-3">Grupo:</h3>
+        <h3>Grupo:</h3>
         <Select name="group" aria-label="Grupo" value={group} onChange={(e: any) => setGroup(e.target.value)}>
           {groups && groups.map((group) => <option value={group._id} key={group._id}>{group.name}</option>)}
         </Select>
-        <h3 className="text-dark mt-3">Endereço:</h3>
+        <h3>Endereço:</h3>
         {addresses && addresses.length > 0 && <TableContainer>
           <table>
             <thead>
@@ -293,7 +293,7 @@ return (
             onClick={() => setShowAddressModal(true)}
           >
             Adicionar Endereço
-            <ImPlus size={28} />
+            <ImPlus size={25} />
           </ModalButton>
         </ContainerButton>
         <StyledButton type="submit">Salvar</StyledButton>
